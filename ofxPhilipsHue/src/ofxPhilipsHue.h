@@ -55,17 +55,22 @@ public:
 					    int transitionDuration = 0/*ms*/
 	);
     
-    void setAllState(  bool state,
-                       float brightness = -1.0,
-                       float saturation = -1.0,
-                       float hue = -1.0,
-                       int transitionDuration = 0/*ms*/
+    void setAllState(   bool state,
+                        float brightness = -1.0,
+                        float saturation = -1.0,
+                        float hue = -1.0,
+                        int transitionDuration = 0/*ms*/
     );
     
-    void setAllState(  bool state,
-                       ofColor color,
-                       int transitionDuration = 0/*ms*/
+    void setAllState(   bool state,
+                        ofColor color,
+                        int transitionDuration = 0/*ms*/
     );
+    
+    void setBrightness( int lightID,
+                        float brightness = -1.0);
+    
+    void setAllBrightness(  float brightness = -1.0);
 
 private:
 

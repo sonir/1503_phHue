@@ -8,17 +8,22 @@
 
 #include "ofxPhilipsHue.h"
 
+
+//-------------------------------------------------------------------------- ofxPhilipsHue
 ofxPhilipsHue::ofxPhilipsHue(){
 	bridge = "";
 	apiUser = "";
 }
 
-void ofxPhilipsHue::setup(string bridgeIP, string userName){
 
+//-------------------------------------------------------------------------- setup
+void ofxPhilipsHue::setup(string bridgeIP, string userName){
 	bridge = bridgeIP;
 	apiUser = userName;
 }
 
+
+//-------------------------------------------------------------------------- setLightState
 void ofxPhilipsHue::setLightState(int lightID, bool state, ofColor c, int transitionDuration){
 
 	float h = c.getHue() / 255.;
@@ -29,6 +34,7 @@ void ofxPhilipsHue::setLightState(int lightID, bool state, ofColor c, int transi
 }
 
 
+//-------------------------------------------------------------------------- setLightState
 void ofxPhilipsHue::setLightState(int lightID, bool state, float brightness, float saturation, float hue, int transitionDuration){
 
 	//build json data
@@ -53,10 +59,10 @@ void ofxPhilipsHue::setLightState(int lightID, bool state, float brightness, flo
 	//cout << json << endl;
 
 	sendCommand(lightID, json);
-
 }
 
 
+//-------------------------------------------------------------------------- setAllState
 void ofxPhilipsHue::setAllState(bool state, ofColor c, int transitionDuration){
     
     float h = c.getHue() / 255.;
@@ -67,6 +73,7 @@ void ofxPhilipsHue::setAllState(bool state, ofColor c, int transitionDuration){
 }
 
 
+//-------------------------------------------------------------------------- setAllState
 void ofxPhilipsHue::setAllState(bool state, float brightness, float saturation, float hue, int transitionDuration){
     
     //build json data
@@ -91,10 +98,40 @@ void ofxPhilipsHue::setAllState(bool state, float brightness, float saturation, 
     //cout << json << endl;
     
     sendToAll(json);
-    
 }
 
 
+//-------------------------------------------------------------------------- setBrightness
+void ofxPhilipsHue::setBrightness(int lightID, float brightness){
+    //build json data
+    string json = "{";
+    
+    if (brightness >= 0.0 && brightness <= 1.0){
+        json += "\"bri\":" + ofToString((int)ofMap(brightness, 0, 1, 0, 255, true));
+    }
+
+    json += " }";
+    
+    sendCommand(lightID, json);
+}
+
+
+//-------------------------------------------------------------------------- setAllBrightness
+void ofxPhilipsHue::setAllBrightness(float brightness){
+    //build json data
+    string json = "{";
+    
+    if (brightness >= 0.0 && brightness <= 1.0){
+        json += "\"bri\":" + ofToString((int)ofMap(brightness, 0, 1, 0, 255, true));
+    }
+    
+    json += " }";
+    
+    sendToAll(json);
+}
+
+
+//-------------------------------------------------------------------------- sendCommand
 bool ofxPhilipsHue::sendCommand(int lightID, string json){
 
 	if (bridge.length() == 0 || apiUser.length() == 0){
@@ -127,7 +164,7 @@ bool ofxPhilipsHue::sendCommand(int lightID, string json){
 		istream& rs = session.receiveResponse(res);
 		string responseBody = "";
 		StreamCopier::copyToString(rs, responseBody);	//copy the data...
-		cout << "ofxPhilipsHue >> Response : " << responseBody << endl << endl;
+//		cout << "ofxPhilipsHue >> Response : " << responseBody << endl << endl;
 		return true;
 	}catch(Exception& exc){
 		ofLog( OF_LOG_ERROR, "ofxPhilipsHue::sendCommand(%s) to %s >> Exception: %s\n", json.c_str(), uri.toString().c_str(), exc.displayText().c_str() );
@@ -136,6 +173,8 @@ bool ofxPhilipsHue::sendCommand(int lightID, string json){
 
 }
 
+
+//-------------------------------------------------------------------------- sendToAll
 bool ofxPhilipsHue::sendToAll(string json){
     
     if (bridge.length() == 0 || apiUser.length() == 0){
