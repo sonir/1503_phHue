@@ -17,14 +17,14 @@ void testApp::setup(){
     
     for(int i = 1; i <= numLights; i++){
         //hue
-        state[i] = true;
+        state[i] = false;
         b[i] = DEFAULT_BRIGHTNESS;
         s[i] = DEFAULT_SATURATION;
         h[i] = DEFAULT_HUE;
 //        b[i] = 1.0;
 //        s[i] = 0.5;
 //        h[i] = 0.3;
-        d[i] = 100.0;
+        d[i] = 1.0;
         clock[i] = -1;
     }
     
@@ -92,8 +92,11 @@ void testApp::draw(){
             switchState = 1;
         }
         
-        else if(r.getAddress() == "/hue/b"){
-//            b[on_off] = DEFAULT_BRIGHTNESS + ofNoise(1.0);
+        else if(r.getAddress() == "/hue/brightness"){
+            float default_brightness = DEFAULT_BRIGHTNESS;
+//            b[0] = default_brightness + ofRandom(-0.4, 0.4);
+            b[0] = r.getArgAsFloat(0);
+//            b[on_off] = DEFAULT_BRIGHTNESS + ofNoise(offset);
         }
         
 //        else{
@@ -122,10 +125,9 @@ void testApp::draw(){
             switchState = -1;
         }
         
-//        if(i==on_off){
-//            b[i] = DEFAULT_BRIGHTNESS + ofNoise(0.4);
-//            hue.setBrightness(i, b[i]);
-//        }
+        if(i==on_off){
+            hue.setBrightness(i, b[0]);
+        }
         
         
 //        clock[i] -= 1000/fps;
@@ -177,9 +179,9 @@ void testApp::draw(){
                            ,95+(infoRectWidth*(i-1)) ,15);
     }
     
-    float default_brightness = DEFAULT_BRIGHTNESS;
-    b[0] = default_brightness + ofRandom(-0.4, 0.4);
-    hue.setAllBrightness(b[0]);
+//    float default_brightness = DEFAULT_BRIGHTNESS;
+//    b[0] = default_brightness + ofRandom(-0.4, 0.4);
+//    hue.setAllBrightness(b[0]);
     
     //debug
 //    ofDrawBitmapString(ofToString(switchState) + "\n"
