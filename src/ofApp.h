@@ -62,6 +62,7 @@ class testApp : public ofBaseApp{
         int infoRectWidth;
     
         //flap
+        float offset;
 //        ofVideoPlayer flapMov;
 };
 

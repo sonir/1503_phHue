@@ -7,7 +7,7 @@ void testApp::setup(){
 
 	ofBackground(0);
     fps = 60;
-	ofSetFrameRate(60); //ghetto limit for the api call rate
+	ofSetFrameRate(fps); //ghetto limit for the api call rate
 	ofSetWindowTitle("ofxPhilipsHue");
 
     //hue
@@ -92,6 +92,9 @@ void testApp::draw(){
             switchState = 1;
         }
         
+        else if(r.getAddress() == "/hue/b"){
+//            b[on_off] = DEFAULT_BRIGHTNESS + ofNoise(1.0);
+        }
         
 //        else{
 //            for(int i=1; i<=numLights; i++){
@@ -107,6 +110,7 @@ void testApp::draw(){
 
     
     //OSC, show info
+    offset += 0.1;
     ofSetColor(255);
     for(int i=1; i<=numLights; i++){
         /* OSC */
@@ -117,6 +121,11 @@ void testApp::draw(){
             hue.setLightState(on_off, false);
             switchState = -1;
         }
+        
+//        if(i==on_off){
+//            b[i] = DEFAULT_BRIGHTNESS + ofNoise(0.4);
+//            hue.setBrightness(i, b[i]);
+//        }
         
         
 //        clock[i] -= 1000/fps;
@@ -166,14 +175,18 @@ void testApp::draw(){
                            + "duration: " + ofToString(d[i]) + " ms" + "\n"
 //                           + "trigger: " + ofToString(clock[i]) + " ms"
                            ,95+(infoRectWidth*(i-1)) ,15);
-        }
+    }
     
-        //debug
-        ofDrawBitmapString(ofToString(switchState) + "\n"
-                           + ofToString(bird_goto) + "\n"
-                           + ofToString(bird_arrive) + "\n"
-                           + ofToString(on_off) + "\n"
-                           ,15 ,15);
+    float default_brightness = DEFAULT_BRIGHTNESS;
+    b[0] = default_brightness + ofRandom(-0.4, 0.4);
+    hue.setAllBrightness(b[0]);
+    
+    //debug
+//    ofDrawBitmapString(ofToString(switchState) + "\n"
+//                       + ofToString(bird_goto) + "\n"
+//                       + ofToString(bird_arrive) + "\n"
+//                       + ofToString(on_off) + "\n"
+//                       ,15 ,15);
 
     
     //color pickker
